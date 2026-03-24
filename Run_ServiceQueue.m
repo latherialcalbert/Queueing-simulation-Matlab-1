@@ -1,5 +1,7 @@
 %[text] # Run samples of the ServiceQueue simulation
 %[text] Collect statistics and plot histograms along the way.
+PictureFolder = "Pictures";
+mkdir(PictureFolder);
 %%
 %[text] ## Set up
 %[text] We'll measure time in hours
@@ -98,8 +100,9 @@ ylim(ax, [0, 0.3]);
 xlim(ax, [-1, 21]);
 %[text] MATLAB-ism: You have to wait a couple of seconds for those settings to take effect or `exportgraphics` will screw up the margins.
 pause(2);
-%[text] Save the picture as a PDF file.
-exportgraphics(fig, "Number in system histogram.pdf");
+%[text] Save the picture.
+exportgraphics(fig, PictureFolder + filesep + "Number in system histogram.pdf");
+exportgraphics(fig, PictureFolder + filesep + "Number in system histogram.svg");
 %%
 %[text] ## Collect measurements of how long customers spend in the system
 %[text] This is a rather different calculation because instead of looking at log entries for each sample `ServiceQueue`, we'll look at the list of served  customers in each sample `ServiceQueue`.
@@ -154,8 +157,10 @@ ylim(ax, [0, 0.2]);
 xlim(ax, [0, 2.0]);
 %[text] Wait for MATLAB to catch up.
 pause(2);
-%[text] Save the picture as a PDF file.
-exportgraphics(fig, "Time in system histogram.pdf");
+%[text] Save the picture.
+exportgraphics(fig, PictureFolder + filesep + "Time in system histogram.pdf");
+exportgraphics(fig, PictureFolder + filesep + "Time in system histogram.svg");
+
 %[appendix]{"version":"1.0"}
 %---
 %[metadata:view]
