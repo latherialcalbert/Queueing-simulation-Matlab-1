@@ -1,5 +1,7 @@
 %[text] # Run samples of the ServiceQueue simulation Latherial Calbert
 %[text] Collect statistics and plot histograms along the way.
+PictureFolder = "Pictures";
+mkdir(PictureFolder);
 %%
 %[text] ## Set up
 %[text] We'll measure time in hours
@@ -9,8 +11,8 @@ lambda = 10;
 mu = 12;
 %[text] Number of serving stations
 s = 1;
-%[text] Run 100 samples of the queue.
-NumSamples = 100;
+%[text] Run many samples of the queue.
+NumSamples = 20;
 %[text] Each sample is run up to a maximum time.
 MaxTime = 96; 
 %[text] Make a log entry every so often
@@ -35,8 +37,7 @@ rng("default");
 %[text] We'll store our queue simulation objects in this list.
 QSamples = cell([NumSamples, 1]);
 %[text] The statistics come out weird if the log interval is too short, because the log entries are not independent enough.  So the log interval should be long enough for several arrival and departure events happen.
-for SampleNum = 1:NumSamples %[output:group:2e9290ad]
-    fprintf("Working on sample %d\n", SampleNum); %[output:2003309d]
+
     q = ServiceQueue( ...
         ArrivalRate=lambda, ...
         DepartureRate=mu, ...
@@ -103,14 +104,11 @@ xlabel(ax, "Count"); %[output:738b26ac]
 ylabel(ax, "Probability"); %[output:738b26ac]
 legend(ax, "simulation", "theory"); %[output:738b26ac]
 %[text] Set ranges on the axes. MATLAB's plotting functions do this automatically, but when you need to compare two sets of data, it's a good idea to use the same ranges on the two pictures.  To start, you can let MATLAB choose the ranges automatically, and just know that it might choose very different ranges for different sets of data.  Once you're certain the picture content is correct, choose an x range and a y range that gives good results for all sets of data.  The final choice of ranges is a matter of some trial and error.  You generally have to do these commands *after* calling `plot` and `histogram`.
-%[text] This sets the vertical axis to go from $0$ to $0.3$.
-ylim(ax, [0, 0.3]); %[output:738b26ac]
+
 %[text] This sets the horizontal axis to go from $-1$ to $21$.  The histogram will use bins $(-0.5, 0.5), (0.5, 1.5), \\dots$ so this leaves some visual breathing room on the left.
 xlim(ax, [-1, 21]); %[output:738b26ac]
 %[text] MATLAB-ism: You have to wait a couple of seconds for those settings to take effect or `exportgraphics` will screw up the margins.
-pause(10);
-%[text] Save the picture as a PDF file.
-exportgraphics(fig, "Number in system histogram.pdf"); %[output:738b26ac]
+
 %%
 %[text] ## Collect measurements of how long customers spend in the system
 %[text] This is a rather different calculation because instead of looking at log entries for each sample `ServiceQueue`, we'll look at the list of served  customers in each sample `ServiceQueue`.
@@ -175,18 +173,7 @@ ylabel(ax, "Probability"); %[output:6773a3ec]
 ylim(ax, [0, 0.2]); %[output:6773a3ec]
 xlim(ax, [0, 2.0]); %[output:6773a3ec]
 %[text] Wait for MATLAB to catch up.
-pause(10);
-%[text] Save the picture as a PDF file.
-exportgraphics(fig, "Time in system histogram.pdf"); %[output:6773a3ec]
-%[text] $\\begin{array}{l}\n\\mathrm{PART}\\;A:\\\\\n\\left.1\\ldotp \\right)\\\\\n\\mathrm{Theoretical}\\;\\mathrm{Results}\\\\\n\\left.a\\ldotp \\;\\right)\\;L=\\lambda \\;\\left(\\mu -\\lambda \\;\\right)=\\frac{\\left(10\\right)}{12-2}=5\\\\\n\\left.b\\ldotp \\right)\\;L\_q =\\frac{\\left(\\lambda^2 \\right)}{\\mu \\;\\left(\\mu -\\lambda \\;\\right)}=\\left(\\frac{{10}^2 }{12-10\\left(12\\right)}\\right)=4\\ldotp 166\\\\\n\\left.c\\ldotp \\right)\\;W=\\frac{\\left(1\\;\\right)}{\\mu -\\lambda \\;}=\\frac{1}{2}\\\\\n\\left.d\\ldotp \\right)\\;W\_q =\\frac{\\left(\\lambda \\;\\right)}{\\left(\\mu \\;\\right)\\mu -\\lambda }=\\frac{\\left(10\\right)}{\\left(12\\right)\\left(12-10\\right)\\;}=0\\ldotp 4166\\\\\n\\mathrm{Simulation}\\;\\mathrm{Results}\\\\\nL=4\\ldotp 8\\\\\nL\_{q\\;} =3\\ldotp 97\\\\\nW=0\\ldotp 48\\\\\nW\_q =0\\ldotp 397\\\\\n\\left.2\\ldotp \\right)\\\\\nW\_{\\mathrm{rel}} =\\;\\frac{\\left(0\\ldotp 48\\right)}{0\\ldotp 5}\\approx 0\\ldotp 96;1-0\\ldotp 96=\\;0\\ldotp 04\\\\\nL\_{\\mathrm{rel}} =\\;\\frac{\\left(4\\ldotp 8\\right)}{5}\\approx 0\\ldotp 96;\\;1-0\\ldotp 96=\\;0\\ldotp 04\\\\\nL\_{q\_{\\mathrm{rel}} } =\\frac{\\left(3\\ldotp 97\\right)}{4\\ldotp 166}\\approx 0\\ldotp 95;1-0\\ldotp 95=0\\ldotp 05\\\\\nW\_{q\_{\\mathrm{rel}} } =\\frac{\\left(0\\ldotp 397\\right)}{0\\ldotp 4166}\\approx 0\\ldotp 95;1-0\\ldotp 95=0\\ldotp 05\\\\\n\\mathrm{The}\\;\\mathrm{theoretical}\\;\\mathrm{results}\\;\\mathrm{are}\\;\\mathrm{very}\\;\\mathrm{close}\\;\\mathrm{to}\\;\\mathrm{the}\\;\\mathrm{simulation}\\;\\mathrm{reults}:\\mathrm{off}\\;\\mathrm{by}\\;%5\\;\\mathrm{or}\\;\\mathrm{less}\\ldotp \n\\end{array}${"editStyle":"visual"} 
-%[text] $\\begin{array}{l}\n\\mathrm{PART}\\;2:\\\\\n\\mathrm{Theoretical}\\;\\mathrm{Results}\\\\\n\\lambda =40\\;\\\\\n\\mu =30\\\\\n{2\\mu \\;=\\mu }\_2 =60\\\\\n\\left.3\\ldotp \\right)P\_0 =\\left(\\frac{1-\\left(\\frac{\\lambda \\;}{\\mu\_2 }\\right)}{1+\\left(\\frac{\\lambda }{\\mu\_2 }\\right)}\\right)=\\left(\\frac{1-\\left(\\frac{40}{60}\\right)}{1+\\left(\\frac{40}{60}\\right)}\\right)=0\\ldotp 2\\\\\nP\_{1\\;} =2{\\left(\\frac{\\lambda }{\\mu\_2 }\\right)}^1 \\left(\\frac{1-\\left(\\frac{\\lambda \\;}{\\mu\_2 }\\right)}{1+\\left(\\frac{\\lambda }{\\mu\_2 }\\right)}\\right)=2\\left(\\frac{40}{60}\\right)\\left(0\\ldotp 2\\right)=0\\ldotp 2667\\\\\nP\_{2\\;} =2{\\left(\\frac{\\lambda }{\\mu\_2 }\\right)}^2 \\left(\\frac{1-\\left(\\frac{\\lambda \\;}{\\mu\_2 }\\right)}{1+\\left(\\frac{\\lambda }{\\mu\_2 }\\right)}\\right)=2{\\left(\\frac{40}{60}\\right)}^2 \\left(0\\ldotp 2\\right)=0\\ldotp 1778\\\\\nP\_{3\\;} =2{\\left(\\frac{\\lambda }{\\mu\_2 }\\right)}^3 \\left(\\frac{1-\\left(\\frac{\\lambda \\;}{\\mu\_2 }\\right)}{1+\\left(\\frac{\\lambda }{\\mu\_2 }\\right)}\\right)=2{\\left(\\frac{40}{60}\\right)}^3 \\left(0\\ldotp 2\\right)=0\\ldotp 1185\\\\\nP\_4 =2{\\left(\\frac{\\lambda }{\\mu\_2 }\\right)}^4 \\left(\\frac{1-\\left(\\frac{\\lambda \\;}{\\mu\_2 }\\right)}{1+\\left(\\frac{\\lambda }{\\mu\_2 }\\right)}\\right)=2{\\left(\\frac{40}{60}\\right)}^4 \\left(0\\ldotp 2\\right)=0\\ldotp 079\\\\\nP\_{5\\;} =2{\\left(\\frac{\\lambda }{\\mu\_2 }\\right)}^5 \\left(\\frac{1-\\left(\\frac{\\lambda \\;}{\\mu\_2 }\\right)}{1+\\left(\\frac{\\lambda }{\\mu\_2 }\\right)}\\right)=2{\\left(\\frac{40}{60}\\right)}^5 \\left(0\\ldotp 2\\right)=0\\ldotp 0527\n\\end{array}${"editStyle":"visual"}
-%[text] $L=\\frac{\\frac{\\lambda }{\\mu }}{\\left(1-\\frac{\\lambda }{\\mu\_2 }\\right)\\left(1+\\frac{\\lambda }{\\mu\_2 }\\right)}=\\frac{\\frac{40}{30}}{\\left(1-\\frac{40}{60}\\right)\\left(1+\\frac{40}{60}\\right)}=2\\ldotp 4${"editStyle":"visual"}
-%[text] $\\begin{array}{l}\nW=\\frac{1}{\\left(\\mu -\\frac{\\lambda }{2}\\right)\\left(1+\\frac{\\lambda }{\\mu\_2 }\\right)}=\\frac{1}{\\left(30-\\frac{40}{2}\\right)\\left(1+\\frac{40}{60}\\right)}=0\\ldotp 06\\\\\n\n\\end{array}${"editStyle":"visual"}
-%[text] $W\_q =\\;${"editStyle":"visual"}$\\frac{1}{\\left(\\mu -\\frac{\\lambda }{2}\\right)\\left(1+\\frac{\\lambda }{\\mu\_2 }\\right)}-\\frac{1}{\\mu }=\\frac{1}{\\left(30-\\frac{40}{2}\\right)\\left(1+\\frac{40}{60}\\right)}-\\frac{1}{30}=0\\ldotp 02667${"editStyle":"visual"}
-%[text] $L\_q =\\lambda \\left(\\frac{1}{\\left(\\mu -\\frac{\\lambda }{2}\\right)\\left(1+\\frac{\\lambda }{\\mu\_2 }\\right)}-\\frac{1}{\\mu }\\right)=\\left(40\\right)\\frac{1}{\\left(30-\\frac{40}{2}\\right)\\left(1+\\frac{40}{60}\\right)}-\\frac{1}{30}=1\\ldotp 0667${"editStyle":"visual"}
-%[text] 4\.) Histograms generated above
-%[text] $\\begin{array}{l}\n\\mathrm{Simulation}\\;\\mathrm{Results}\\\\\nP\_0 =0\\ldotp 2\\\\\nP\_1 =0\\ldotp 2667\\\\\nP\_2 =0\\ldotp 1778\\\\\nP\_3 =0\\ldotp 1185\\\\\nP\_4 =0\\ldotp 079\\\\\nP\_5 =0\\ldotp 0527\\\\\nL=2\\ldotp 411223\\\\\nW=0\\ldotp 060537\\\\\nL\_q =1\\ldotp 089162\\\\\nW\_q =0\\ldotp 027253\\\\\n\\mathrm{Theoreitcal}\\;\\mathrm{vs}\\ldotp \\mathrm{simulation}\\;\\mathrm{Discrepancy}\\\\\n\\frac{0\\ldotp 2}{0\\ldotp 2}=1,1-1=0%\\\\\n\\ldotp \\ldotp \\ldotp \\\\\n0%\\\\\n0%\\\\\n0%\\\\\n0%\\\\\n0%\\\\\n\\frac{2\\ldotp 411223}{2\\ldotp 4}=1\\ldotp 07215,7\\ldotp 215%\\\\\n\\frac{0\\ldotp 060537}{0\\ldotp 06}=1\\ldotp 00895,\\ldotp 08%\\\\\n\\frac{1\\ldotp 089162}{1\\ldotp 0667}=1\\ldotp 021,2%\\\\\n\\frac{0\\ldotp 027253}{0\\ldotp 02667}=1\\ldotp 0218,2%\n\\end{array}${"editStyle":"visual"}
-%[text] 
+
 
 %[appendix]{"version":"1.0"}
 %---
