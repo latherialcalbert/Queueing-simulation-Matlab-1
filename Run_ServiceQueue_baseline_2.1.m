@@ -26,7 +26,7 @@ MaxTime = 4;
 %%% every hour is 
 LogInterval = 5/60;
 %%
-%[text] ## Numbers from theory for M/M/1 queue
+%[text] ## Numbers from theory for M/M/K queue
 %[text] Compute `P(1+n)` = $P\_n$ = probability of finding the system in state $n$ in the long term. Note that this calculation assumes $s=1$.
  % rho = lambda / mu;
  % P0 = 1 - rho;
